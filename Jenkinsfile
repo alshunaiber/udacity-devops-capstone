@@ -1,5 +1,4 @@
 pipeline {
-    def app
 
     agent any
 
@@ -9,6 +8,8 @@ pipeline {
 
     environment {
         APP_NAME = "books"
+        DOCKER_IMAGE = '' 
+
     }
 
     stages {
@@ -44,11 +45,13 @@ pipeline {
         }
 
         stage('Build docker image') {
-            // steps {
-            //     echo '### Building docker image ###'
-
-            // }
-                app = docker.build("getintodevops/hellonode")
+            steps {
+                // echo '### Building docker image ###'
+                script {
+                    DOCKER_IMAGE = docker.build("faalsh/books")
+                }
+            }
+            // app = docker.build("getintodevops/hellonode")
         }
 
         stage('Push image to registry') {
