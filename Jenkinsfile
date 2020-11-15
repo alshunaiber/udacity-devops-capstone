@@ -43,10 +43,10 @@ pipeline {
         }
 
         stage('Build docker image') {
-            steps {
-                echo '### Building docker image ###'
+            // steps {
+            //     echo '### Building docker image ###'
 
-            }
+            // }
                 app = docker.build("getintodevops/hellonode")
         }
 
