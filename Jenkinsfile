@@ -10,7 +10,7 @@ pipeline {
         APP_NAME = "books"
         DOCKER_USER= 'faalsh'
         DOCKER_IMAGE = '' 
-        registryCredential = 'dockerhub_id' 
+        registryCredential = 'docker_login' 
     }
 
     stages {
