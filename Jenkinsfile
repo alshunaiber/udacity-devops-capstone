@@ -10,6 +10,7 @@ pipeline {
         APP_NAME = "books"
         DOCKER_USER= 'faalsh'
         DOCKER_IMAGE = '' 
+        registryCredential = 'dockerhub_id' 
     }
 
     stages {
@@ -54,7 +55,7 @@ pipeline {
             steps {
                 echo '### Building docker image ###'
                 script {
-                    DOCKER_IMAGE = docker.build("${DOCKER_USER}/${APP_NAME}", "./src")
+                    DOCKER_IMAGE = docker.build("${DOCKER_USER}/${APP_NAME}:${BUILD_NUMBER}", "./src")
                 }
             }
         }
@@ -62,6 +63,11 @@ pipeline {
         stage('Push image to registry') {
             steps {
                 echo '### Pushing image to registry ###'
+                script {
+                    docker.withRegistry( '', registryCredential ) { 
+                        DOCKER_IMAGE.push() 
+                    }
+                }
             }
         }
 
