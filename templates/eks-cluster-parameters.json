@@ -23,5 +23,17 @@
 	{
 		"ParameterKey": "PrivateSubnet2CIDR",
 		"ParameterValue": "10.0.4.0/24"
+	},
+	{
+		"ParameterKey": "NodeAutoScalingGroupDesiredCapacity",
+		"ParameterValue": "2"
+	},
+	{
+		"ParameterKey": "NodeAutoScalingGroupMaxSize",
+		"ParameterValue": "4"
+	},
+	{
+		"ParameterKey": "NodeAutoScalingGroupMinSize",
+		"ParameterValue": "1"
 	}
 ]

@@ -31,6 +31,21 @@ Parameters:
     Type: String
     Default: 10.0.4.0/24
 
+  NodeAutoScalingGroupDesiredCapacity:
+    Type: Number
+    Default: 2
+    Description: Desired capacity of Node Group ASG.
+
+  NodeAutoScalingGroupMaxSize:
+    Type: Number
+    Default: 4
+    Description: Maximum size of Node Group ASG. Set to at least 1 greater than NodeAutoScalingGroupDesiredCapacity.
+
+  NodeAutoScalingGroupMinSize:
+    Type: Number
+    Default: 1
+    Description: Minimum size of Node Group ASG.
+
 Resources:
 
 # step 1: create IAM role
@@ -238,6 +253,40 @@ Resources:
         - !Ref PrivateSubnet2
     DependsOn: [EKSIAMRole, PublicSubnet1, PublicSubnet2, PrivateSubnet1, PrivateSubnet2, ControlPlaneSecurityGroup]
 
+# step 5: create worker nodes
+
+  NodeInstanceRole:
+    Type: "AWS::IAM::Role"
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - "sts:AssumeRole"
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
+        - "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
+        - "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+      Path: /
+
+  EKSNodegroup:
+    Type: "AWS::EKS::Nodegroup"
+    DependsOn: EKSCluster
+    Properties:
+      ClusterName: !Ref EKSCluster
+      NodeRole: !GetAtt NodeInstanceRole.Arn
+      ScalingConfig:
+        MinSize: !Ref NodeAutoScalingGroupMinSize
+        DesiredSize: !Ref NodeAutoScalingGroupDesiredCapacity
+        MaxSize: !Ref NodeAutoScalingGroupMaxSize
+      Subnets:
+        - !Ref PrivateSubnet1
+        - !Ref PrivateSubnet2
+
 Outputs:
   VPC: 
     Description: A reference to the created VPC
@@ -274,5 +323,9 @@ Outputs:
     Value: !Join [ ",", [ !Ref PublicSubnet1, !Ref PublicSubnet2 ]]
     Export:
       Name: !Sub ${EnvironmentName}-PUB-NETS
-
-
+  NodeInstanceRole:
+    Description: The node instance role
+    Value: !GetAtt NodeInstanceRole.Arn
+  Nodegroup:
+    Description: EKS node group
+    Value: !Ref EKSNodegroup
