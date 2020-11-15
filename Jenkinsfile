@@ -55,7 +55,7 @@ pipeline {
             steps {
                 echo '### Building docker image ###'
                 script {
-                    DOCKER_IMAGE = docker.build("${DOCKER_USER}/${APP_NAME}:${BUILD_NUMBER}", "./src")
+                    DOCKER_IMAGE = docker.build("${DOCKER_USER}/${APP_NAME}:${BUILD_ID}", "./src")
                 }
             }
         }
@@ -65,7 +65,8 @@ pipeline {
                 echo '### Pushing image to registry ###'
                 script {
                     docker.withRegistry( '', registryCredential ) { 
-                        DOCKER_IMAGE.push() 
+                        DOCKER_IMAGE.push("latest")
+                        DOCKER_IMAGE.push("${BUILD_ID}")
                     }
                 }
             }
