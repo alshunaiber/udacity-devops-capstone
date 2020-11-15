@@ -4,7 +4,6 @@ pipeline {
 
     tools {
         nodejs "nodejs"
-        docker "docker"
     }
 
     environment {
