@@ -45,6 +45,21 @@ Parameters:
     Type: Number
     Default: 1
     Description: Minimum size of Node Group ASG.
+  
+  NodegroupAMIType:
+    Type: String
+    Default: AL2_x86_64
+    Description: The AMI type for your node group. GPU instance types should use the AL2_x86_64_GPU AMI type. Non-GPU instances should use the AL2_x86_64 AMI type. Arm instances should use the AL2_ARM_64 AMI type
+  
+  NodegroupDiskSize:
+    Type: Number
+    Default: 20
+    Description: The root device disk size (in GiB) for your node group instances.
+
+  NodegroupInstanceType: 
+    Type: String
+    Default: t3.medium
+    Description: The instance type to use for your node group
 
 Resources:
 
@@ -123,6 +138,8 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName} Private Subnet (AZ1)
+        - Key: "kubernetes.io/role/internal-elb"
+          Value: 1
 
   PrivateSubnet2:
     Type: AWS::EC2::Subnet
@@ -134,6 +151,8 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub ${EnvironmentName} Private Subnet (AZ2)
+        - Key: "kubernetes.io/role/internal-elb"
+          Value: 1
 
   NatGateway1EIP:
     Type: AWS::EC2::EIP
@@ -277,6 +296,10 @@ Resources:
     Type: "AWS::EKS::Nodegroup"
     DependsOn: EKSCluster
     Properties:
+      AmiType : !Ref NodegroupAMIType
+      "DiskSize" : Double,
+      "InstanceTypes" : [ String, ... ],
+
       ClusterName: !Ref EKSCluster
       NodeRole: !GetAtt NodeInstanceRole.Arn
       ScalingConfig:
