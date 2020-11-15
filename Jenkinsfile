@@ -1,10 +1,8 @@
 pipeline {
 
-    agent {
-        node {
-            label 'master'
-        }
-    }
+    agent any
+
+    tools {nodejs "nodejs"}
 
     environment {
         APP_NAME = "books"
