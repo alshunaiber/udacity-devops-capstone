@@ -10,7 +10,6 @@ pipeline {
         APP_NAME = "books"
     }
 
-
     stages {
 
         stage('NPM Install') {
@@ -38,21 +37,16 @@ pipeline {
         }
 
         stage('Run Docker Linting Tools') {
-            agent {
-                docker {
-                    image 'hadolint/hadolint:latest-debian'
-                }
-            }
-            tools {docker "docker"}
             steps {
                 echo '### Running Docker Linting Tools ###'
-                sh 'hadolint src/Dockerfile'
             }
         }
 
         stage('Build docker image') {
             steps {
                 echo '### Building docker image ###'
+                app = docker.build("getintodevops/hellonode")
+
             }
         }
 
