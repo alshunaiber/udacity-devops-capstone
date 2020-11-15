@@ -10,13 +10,14 @@ pipeline {
         APP_NAME = "books"
     }
 
-    stage('Initialize'){
-        def dockerHome = tool 'docker'
-        env.PATH = "${dockerHome}/bin:${env.PATH}"
-    }
 
     stages {
 
+        stage('Initialize'){
+            def dockerHome = tool 'docker'
+            env.PATH = "${dockerHome}/bin:${env.PATH}"
+        }
+        
         stage('NPM Install') {
             steps {
                 echo '### Installing NPM dependencies ###'
