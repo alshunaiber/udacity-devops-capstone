@@ -1,5 +1,5 @@
 Description: >
-  CloudFormation stack to create EKS cluster
+  CloudFormation stack to create EKS cluster and worker nodes
 
 Parameters:
   EnvironmentName:
@@ -255,7 +255,7 @@ Resources:
       GroupDescription: Cluster communication with worker nodes
       VpcId: !Ref VPC
   
-# step 4: create EKS cluster 
+# # step 4: create EKS cluster 
   EKSCluster:
     Type: AWS::EKS::Cluster
     Properties:
@@ -272,7 +272,7 @@ Resources:
         - !Ref PrivateSubnet2
     DependsOn: [EKSIAMRole, PublicSubnet1, PublicSubnet2, PrivateSubnet1, PrivateSubnet2, ControlPlaneSecurityGroup]
 
-# step 5: create worker nodes
+# # step 5: create worker nodes
 
   NodeInstanceRole:
     Type: "AWS::IAM::Role"
@@ -297,9 +297,8 @@ Resources:
     DependsOn: EKSCluster
     Properties:
       AmiType : !Ref NodegroupAMIType
-      "DiskSize" : Double,
-      "InstanceTypes" : [ String, ... ],
-
+      DiskSize : !Ref NodegroupDiskSize
+      InstanceTypes : !Split [",", !Ref NodegroupInstanceType]
       ClusterName: !Ref EKSCluster
       NodeRole: !GetAtt NodeInstanceRole.Arn
       ScalingConfig:
