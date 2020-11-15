@@ -13,11 +13,6 @@ pipeline {
 
     stages {
 
-        stage('Initialize'){
-            def dockerHome = tool 'docker'
-            env.PATH = "${dockerHome}/bin:${env.PATH}"
-        }
-        
         stage('NPM Install') {
             steps {
                 echo '### Installing NPM dependencies ###'
@@ -48,6 +43,7 @@ pipeline {
                     image 'hadolint/hadolint:latest-debian'
                 }
             }
+            tools {docker "docker"}
             steps {
                 echo '### Running Docker Linting Tools ###'
                 sh 'hadolint src/Dockerfile'
