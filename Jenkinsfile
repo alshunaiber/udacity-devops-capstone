@@ -45,9 +45,9 @@ pipeline {
         stage('Build docker image') {
             steps {
                 echo '### Building docker image ###'
-                app = docker.build("getintodevops/hellonode")
 
             }
+                app = docker.build("getintodevops/hellonode")
         }
 
         stage('Push image to registry') {
