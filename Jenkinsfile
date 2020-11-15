@@ -13,12 +13,11 @@ pipeline {
 
     stages {
 
-
         stage('test') {
             steps {
                 echo '### Building docker image ###'
                 script {
-                    DOCKER_IMAGE = docker.build("faalsh/books")
+                    DOCKER_IMAGE = docker.build("faalsh/books", "-f Dockerfile ./src")
                 }
             }
         }
