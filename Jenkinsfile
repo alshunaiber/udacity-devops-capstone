@@ -1,6 +1,6 @@
 pipeline {
 
-    agent any
+    agent none
 
     // tools {
     //     nodejs "nodejs"
@@ -9,16 +9,21 @@ pipeline {
     environment {
         APP_NAME = "books"
         DOCKER_IMAGE = '' 
-        dockerHome = ''
-        nodejsHome = ''
     }
 
     stages {
 
-        stage('Initialize') {
-            dockerHome = tool 'docker'
-            nodejsHome  = tool 'nodejs'
-            env.PATH = "${dockerHome}/bin:${nodejsHome}/bin:${env.PATH}"
+        stage('test docker') {
+            agent {
+                docker {
+                    image 'node:7-alpine'
+                    args '--name docker-node' // list any args
+                }
+            }
+            steps {
+                // Steps run in node:7-alpine docker container on docker slave
+                sh 'node --version'
+            }        
         }
 
         stage('NPM Install') {
