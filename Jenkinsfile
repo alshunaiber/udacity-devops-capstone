@@ -9,14 +9,15 @@ pipeline {
     environment {
         APP_NAME = "books"
         DOCKER_IMAGE = '' 
-
+        dockerHome = ''
+        nodejsHome = ''
     }
 
     stages {
 
         stage('Initialize') {
-            def dockerHome = tool 'docker'
-            def nodejsHome  = tool 'nodejs'
+            dockerHome = tool 'docker'
+            nodejsHome  = tool 'nodejs'
             env.PATH = "${dockerHome}/bin:${nodejsHome}/bin:${env.PATH}"
         }
 
