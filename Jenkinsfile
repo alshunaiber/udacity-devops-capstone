@@ -14,7 +14,7 @@ pipeline {
     stages {
 
 
-        stage('Build docker image') {
+        stage('test') {
             steps {
                 echo '### Building docker image ###'
                 script {
