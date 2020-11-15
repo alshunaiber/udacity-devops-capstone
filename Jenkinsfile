@@ -1,11 +1,10 @@
 pipeline {
 
-    agent {
-        label 'docker' 
+    agent any
+
+    tools {
+        nodejs "nodejs"
     }
-    // tools {
-    //     nodejs "nodejs"
-    // }
 
     environment {
         APP_NAME = "books"
@@ -14,18 +13,17 @@ pipeline {
 
     stages {
 
-        stage('test docker') {
-            agent {
-                docker {
-                    image 'node:7-alpine'
-                    args '--name docker-node' // list any args
+
+        stage('Build docker image') {
+            steps {
+                echo '### Building docker image ###'
+                script {
+                    DOCKER_IMAGE = docker.build("faalsh/books")
                 }
             }
-            steps {
-                // Steps run in node:7-alpine docker container on docker slave
-                sh 'node --version'
-            }        
         }
+
+
 
         stage('NPM Install') {
             steps {
