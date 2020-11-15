@@ -38,21 +38,26 @@ pipeline {
 
         stage('Run Docker Linting Tools') {
             steps {
+                echo '### Running Docker Linting Tools ###'
+
             }
         }
 
         stage('Build docker image') {
             steps {
+                echo '### Building docker image ###'
             }
         }
 
         stage('Push image to registry') {
             steps {
+                echo '### Pushing image to registry ###'
             }
         }
 
         stage('Deploy image to kubernetes cluster') {
             steps {
+                echo '### Deploying image to kubernetes cluster ###'
             }
         }
     }
