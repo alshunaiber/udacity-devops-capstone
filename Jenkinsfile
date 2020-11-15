@@ -17,7 +17,7 @@ pipeline {
             steps {
                 echo '### Building docker image ###'
                 script {
-                    DOCKER_IMAGE = docker.build("faalsh/books", "-f Dockerfile ./src")
+                    DOCKER_IMAGE = docker.build("faalsh/books", "./src")
                 }
             }
         }
