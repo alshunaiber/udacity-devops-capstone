@@ -2,9 +2,9 @@ pipeline {
 
     agent any
 
-    tools {
-        nodejs "nodejs"
-    }
+    // tools {
+    //     nodejs "nodejs"
+    // }
 
     environment {
         APP_NAME = "books"
@@ -13,6 +13,12 @@ pipeline {
     }
 
     stages {
+
+        stage('Initialize') {
+            def dockerHome = tool 'docker'
+            def nodejsHome  = tool 'nodejs'
+            env.PATH = "${dockerHome}/bin:${nodejsHome}/bin:${env.PATH}"
+        }
 
         stage('NPM Install') {
             steps {
@@ -46,12 +52,11 @@ pipeline {
 
         stage('Build docker image') {
             steps {
-                // echo '### Building docker image ###'
+                echo '### Building docker image ###'
                 script {
                     DOCKER_IMAGE = docker.build("faalsh/books")
                 }
             }
-            // app = docker.build("getintodevops/hellonode")
         }
 
         stage('Push image to registry') {
