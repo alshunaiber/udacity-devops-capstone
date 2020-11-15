@@ -17,7 +17,7 @@ pipeline {
                 echo '### Installing NPM dependencies ###'
                 sh '''
                         cd src
-                        npm install
+                        /usr/bin/npm install
                    '''
             }
         }
@@ -25,14 +25,14 @@ pipeline {
         stage('Run Unit Tests') {
             steps {
                 echo '### Running unit tests ###'
-                sh 'cd src; npm test'
+                sh 'cd src; /usr/bin/npm test'
             }
         }
 
         stage('Run Nodejs Linting Tools') {
             steps {
                 echo '### Running eslint on code ###'
-                sh 'cd src; npm run lint'
+                sh 'cd src; /usr/bin/npm run lint'
             }
         }
 
