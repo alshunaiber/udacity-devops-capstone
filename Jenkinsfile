@@ -2,7 +2,10 @@ pipeline {
 
     agent any
 
-    tools {nodejs "nodejs"}
+    tools {
+        nodejs "nodejs"
+        docker "docker"
+    }
 
     environment {
         APP_NAME = "books"
@@ -35,9 +38,14 @@ pipeline {
         }
 
         stage('Run Docker Linting Tools') {
+            agent {
+                docker {
+                    image 'hadolint/hadolint:latest-debian'
+                }
+            }
             steps {
                 echo '### Running Docker Linting Tools ###'
-
+                sh 'hadolint src/Dockerfile'
             }
         }
 
