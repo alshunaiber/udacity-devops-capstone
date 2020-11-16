@@ -28,22 +28,19 @@ pipeline {
                 withKubeConfig([credentialsId: "${kubeCredential}"]) {
                     sh 'kubectl apply -f $kubeConfig'
                 }
-
-                sleep time: 250, unit: 'MINUTES'
-
             }
         }
 
 
-        // stage('NPM Install') {
-        //     steps {
-        //         echo '### Installing NPM dependencies ###'
-        //         sh '''
-        //                 cd src
-        //                 npm install
-        //            '''
-        //     }
-        // }
+        stage('NPM Install') {
+            steps {
+                echo '### Installing NPM dependencies ###'
+                sh '''
+                        cd src
+                        npm install
+                   '''
+            }
+        }
 
         // stage('Run Unit Tests') {
         //     steps {
@@ -52,12 +49,12 @@ pipeline {
         //     }
         // }
 
-        // stage('Run Nodejs Linting Tools') {
-        //     steps {
-        //         echo '### Running eslint on code ###'
-        //         sh 'cd src; npm run lint'
-        //     }
-        // }
+        stage('Run Nodejs Linting Tools') {
+            steps {
+                echo '### Running eslint on code ###'
+                sh 'cd src; npm run lint'
+            }
+        }
 
         // stage('Run Docker Linting Tools') {
         //     agent {
