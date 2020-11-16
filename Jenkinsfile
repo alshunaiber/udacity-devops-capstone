@@ -23,7 +23,7 @@ pipeline {
             steps {
                 echo '### Deploying image to kubernetes cluster ###'
                 script {
-                    kubernetesDeploy(configs: ${kubeConfig}, kubeconfigId: ${kubeCredential})
+                    kubernetesDeploy(configs: "${kubeConfig}", kubeconfigId: "${kubeCredential}")
                 }
             }
         }
