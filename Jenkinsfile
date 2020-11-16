@@ -22,8 +22,11 @@ pipeline {
         stage('test deploy') {
             steps {
                 echo '### Deploying image to kubernetes cluster ###'
-                script {
-                    kubernetesDeploy(configs: "${kubeConfig}", kubeconfigId: "${kubeCredential}")
+                // script {
+                //     kubernetesDeploy(configs: "${kubeConfig}", kubeconfigId: "${kubeCredential}")
+                // }
+                withKubeConfig([credentialsId: "${kubeCredential}"]) {
+                    sh 'kubectl apply -f $kubeConfig'
                 }
             }
         }
