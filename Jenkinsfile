@@ -19,14 +19,14 @@ pipeline {
 
     stages {
 
-        stage('test deploy') {
-            steps {
-                echo '### Deploying image to kubernetes cluster ###'
-                script {
-                    kubernetesDeploy(configs: "${kubeConfig}", kubeconfigId: "${kubeCredential}")
-                }
-            }
-        }
+        // stage('test deploy') {
+        //     steps {
+        //         echo '### Deploying image to kubernetes cluster ###'
+        //         script {
+        //             kubernetesDeploy(configs: "${kubeConfig}", kubeconfigId: "${kubeCredential}")
+        //         }
+        //     }
+        // }
 
 
         stage('NPM Install') {
