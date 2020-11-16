@@ -81,8 +81,11 @@ pipeline {
             
             steps {
                 echo '### Deploying image to kubernetes cluster ###'
-                withKubeConfig([credentialsId: "${kubeCredential}"]) {
-                    sh 'kubectl apply -f config.yml'
+                // withKubeConfig([credentialsId: "${kubeCredential}"]) {
+                //     sh 'kubectl apply -f config.yml'
+                // }
+                script {
+                    sh 'ansible-playbook  playbook.yml --extra-vars \"BUILD_ID=${BUILD_ID}\"'
                 }
             }
         }
