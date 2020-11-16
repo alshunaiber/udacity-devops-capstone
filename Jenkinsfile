@@ -7,13 +7,27 @@ pipeline {
     }
 
     environment {
-        APP_NAME = "books"
-        DOCKER_USER= 'faalsh'
-        DOCKER_IMAGE = '' 
+        appName = "books"
+        dockerUser= 'faalsh'
         registryCredential = 'docker_login' 
+        kubeCredential = 'kube_login'
+        kubeConfig = 'config.yml'
+        
+        dockerImage = '' 
+
     }
 
     stages {
+
+        stage('test deploy') {
+            steps {
+                echo '### Deploying image to kubernetes cluster ###'
+                script {
+                    kubernetesDeploy(configs: "${kubeConfig}", kubeconfigId: "${kubeCredential}")
+                }
+            }
+        }
+
 
         stage('NPM Install') {
             steps {
@@ -55,8 +69,10 @@ pipeline {
             steps {
                 echo '### Building docker image ###'
                 script {
-                    DOCKER_IMAGE = docker.build("${DOCKER_USER}/${APP_NAME}:${BUILD_ID}", "./src")
                 }
+                    kubeCredential = 'kube_login'
+                    
+                    dockerImage = docker.build("${dockerUser}/${appName}:${BUILD_ID}", "./src")
             }
         }
 
@@ -65,17 +81,22 @@ pipeline {
                 echo '### Pushing image to registry ###'
                 script {
                     docker.withRegistry( '', registryCredential ) { 
-                        DOCKER_IMAGE.push("latest")
-                        DOCKER_IMAGE.push("${BUILD_ID}")
+                        dockerImage.push("${BUILD_ID}")
+                        kubeCredential = 'kube_login'
+                        
+                        dockerImage.push("latest")
                     }
                 }
             }
         }
 
-        stage('Deploy image to kubernetes cluster') {
-            steps {
-                echo '### Deploying image to kubernetes cluster ###'
-            }
-        }
+        // stage('Deploy image to kubernetes cluster') {
+        //     steps {
+        //         echo '### Deploying image to kubernetes cluster ###'
+        //         script {
+        //             kubernetesDeploy(configs: "hellowhale.yml", kubeconfigId: "mykubeconfig")
+        //         }
+        //     }
+        // }
     }
 }
