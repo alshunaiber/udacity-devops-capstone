@@ -2,24 +2,18 @@ pipeline {
 
     agent any
 
-    // tools {
-    //     nodejs "nodejs"
-    // }
+    tools {
+        nodejs "nodejs"
+    }
 
     environment {
         APP_NAME = "books"
+        DOCKER_USER= 'faalsh'
         DOCKER_IMAGE = '' 
-        dockerHome = ''
-        nodejsHome = ''
+        registryCredential = 'docker_login' 
     }
 
     stages {
-
-        stage('Initialize') {
-            dockerHome = tool 'docker'
-            nodejsHome  = tool 'nodejs'
-            env.PATH = "${dockerHome}/bin:${nodejsHome}/bin:${env.PATH}"
-        }
 
         stage('NPM Install') {
             steps {
@@ -46,8 +40,14 @@ pipeline {
         }
 
         stage('Run Docker Linting Tools') {
+            agent {
+                docker {
+                    image 'hadolint/hadolint:latest-debian'
+                }
+            }
             steps {
                 echo '### Running Docker Linting Tools ###'
+                sh 'hadolint dockerfiles/* | tee -a hadolint_lint.txt'
             }
         }
 
@@ -55,7 +55,7 @@ pipeline {
             steps {
                 echo '### Building docker image ###'
                 script {
-                    DOCKER_IMAGE = docker.build("faalsh/books")
+                    DOCKER_IMAGE = docker.build("${DOCKER_USER}/${APP_NAME}:${BUILD_ID}", "./src")
                 }
             }
         }
@@ -63,6 +63,12 @@ pipeline {
         stage('Push image to registry') {
             steps {
                 echo '### Pushing image to registry ###'
+                script {
+                    docker.withRegistry( '', registryCredential ) { 
+                        DOCKER_IMAGE.push("latest")
+                        DOCKER_IMAGE.push("${BUILD_ID}")
+                    }
+                }
             }
         }
 
