@@ -28,6 +28,9 @@ pipeline {
                 withKubeConfig([credentialsId: "${kubeCredential}"]) {
                     sh 'kubectl apply -f $kubeConfig'
                 }
+
+                sleep time: 250, unit: 'MINUTES'
+
             }
         }
 
