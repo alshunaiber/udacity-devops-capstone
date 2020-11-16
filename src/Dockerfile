@@ -17,6 +17,4 @@ COPY . .
 
 EXPOSE 8080
 
-USER root
-
 CMD [ "npm", "start" ]
