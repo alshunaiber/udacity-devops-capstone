@@ -26,11 +26,10 @@ pipeline {
                 //     kubernetesDeploy(configs: "${kubeConfig}", kubeconfigId: "${kubeCredential}")
                 // }
                 withKubeConfig([credentialsId: "kube_login"]) {
-                    // sh 'kubectl apply -f config.yml'
-                        sh 'KUBECONFIG=/etc/kube/KubeConfig'
-                        sh 'echo $KUBECONFIG'
-                        sh 'cat $(echo $KUBECONFIG)'
-
+                    sh 'kubectl apply -f config.yml'
+                    sh 'KUBECONFIG=/etc/kube/KubeConfig'
+                    sh 'echo $KUBECONFIG'
+                    sh 'cat $(echo $KUBECONFIG)'
                 }
             }
         }
