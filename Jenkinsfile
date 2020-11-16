@@ -18,16 +18,6 @@ pipeline {
 
     stages {
 
-        stage('test deploy') {
-            steps {
-                echo '### Deploying image to kubernetes cluster ###'
-                withKubeConfig([credentialsId: "${kubeCredential}"]) {
-                    sh 'kubectl apply -f config.yml'
-                }
-            }
-        }
-
-
         stage('NPM Install') {
             steps {
                 echo '### Installing NPM dependencies ###'
