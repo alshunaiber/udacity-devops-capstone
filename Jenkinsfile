@@ -25,7 +25,9 @@ pipeline {
                 // script {
                 //     kubernetesDeploy(configs: "${kubeConfig}", kubeconfigId: "${kubeCredential}")
                 // }
-                withKubeConfig([credentialsId: "${kubeCredential}"]) {
+                withKubeConfig([credentialsId: "${kubeCredential}",
+                                contextName: "arn:aws:eks:us-west-2:277359448758:cluster/UdacityProject-EKS",
+                                serverUrl: "https://AEFF9971B467B49B1920B70587F0056A.gr7.us-west-2.eks.amazonaws.com"]) {
                     sh 'kubectl apply -f config.yml'
                 }
             }
