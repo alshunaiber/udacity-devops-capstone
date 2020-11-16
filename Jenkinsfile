@@ -12,7 +12,7 @@ pipeline {
         registryCredential = 'docker_login' 
         kubeCredential = 'kube_login'
         kubeConfig = 'config.yml'
-        
+
         dockerImage = '' 
 
     }
@@ -90,13 +90,13 @@ pipeline {
             }
         }
 
-        // stage('Deploy image to kubernetes cluster') {
-        //     steps {
-        //         echo '### Deploying image to kubernetes cluster ###'
-        //         script {
-        //             kubernetesDeploy(configs: "hellowhale.yml", kubeconfigId: "mykubeconfig")
-        //         }
-        //     }
-        // }
+        stage('Deploy image to kubernetes cluster') {
+            steps {
+                echo '### Deploying image to kubernetes cluster ###'
+                script {
+                    kubernetesDeploy(configs: "hellowhale.yml", kubeconfigId: "mykubeconfig")
+                }
+            }
+        }
     }
 }
