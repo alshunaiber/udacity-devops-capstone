@@ -10,7 +10,7 @@ pipeline {
         appName = "books"
         dockerUser= "faalsh"
         registryCredential = "docker_login"
-        // kubeCredential = "kube_login"
+        kubeCredential = "kube_login"
         // kubeConfig = "config.yml"
 
         dockerImage = ""
