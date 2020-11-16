@@ -21,9 +21,6 @@ pipeline {
         stage('test deploy') {
             steps {
                 echo '### Deploying image to kubernetes cluster ###'
-                // script {
-                //     kubernetesDeploy(configs: "${kubeConfig}", kubeconfigId: "${kubeCredential}")
-                // }
                 withKubeConfig([credentialsId: "${kubeCredential}"]) {
                     sh 'kubectl apply -f config.yml'
                 }
@@ -31,74 +28,73 @@ pipeline {
         }
 
 
-        // stage('NPM Install') {
-        //     steps {
-        //         echo '### Installing NPM dependencies ###'
-        //         sh '''
-        //                 cd src
-        //                 npm install
-        //            '''
-        //     }
-        // }
+        stage('NPM Install') {
+            steps {
+                echo '### Installing NPM dependencies ###'
+                sh '''
+                        cd src
+                        npm install
+                   '''
+            }
+        }
 
-        // stage('Run Unit Tests') {
-        //     steps {
-        //         echo '### Running unit tests ###'
-        //         sh 'cd src; npm test'
-        //     }
-        // }
+        stage('Run Unit Tests') {
+            steps {
+                echo '### Running unit tests ###'
+                sh 'cd src; npm test'
+            }
+        }
 
-        // stage('Run Nodejs Linting Tools') {
-        //     steps {
-        //         echo '### Running eslint on code ###'
-        //         sh 'cd src; npm run lint'
-        //     }
-        // }
+        stage('Run Nodejs Linting Tools') {
+            steps {
+                echo '### Running eslint on code ###'
+                sh 'cd src; npm run lint'
+            }
+        }
 
-        // stage('Run Docker Linting Tools') {
-        //     agent {
-        //         docker {
-        //             image 'hadolint/hadolint:latest-debian'
-        //         }
-        //     }
-        //     steps {
-        //         echo '### Running Docker Linting Tools ###'
-        //         sh 'hadolint dockerfiles/* | tee -a hadolint_lint.txt'
-        //     }
-        // }
+        stage('Run Docker Linting Tools') {
+            agent {
+                docker {
+                    image 'hadolint/hadolint:latest-debian'
+                }
+            }
+            steps {
+                echo '### Running Docker Linting Tools ###'
+                sh 'hadolint dockerfiles/* | tee -a hadolint_lint.txt'
+            }
+        }
 
-        // stage('Build docker image') {
-        //     steps {
-        //         echo '### Building docker image ###'
-        //         script {
-        //         }
-        //             kubeCredential = 'kube_login'
-                    
-        //             dockerImage = docker.build("${dockerUser}/${appName}:${BUILD_ID}", "./src")
-        //     }
-        // }
+        stage('Build docker image') {
+            steps {
+                echo '### Building docker image ###'
+                script {
+                    dockerImage = docker.build("${dockerUser}/${appName}:${BUILD_ID}", "./src")
+                }                    
+            }
+        }
 
-        // stage('Push image to registry') {
-        //     steps {
-        //         echo '### Pushing image to registry ###'
-        //         script {
-        //             docker.withRegistry( '', registryCredential ) { 
-        //                 dockerImage.push("${BUILD_ID}")
-        //                 kubeCredential = 'kube_login'
+        stage('Push image to registry') {
+            steps {
+                echo '### Pushing image to registry ###'
+                script {
+                    docker.withRegistry( '', registryCredential ) { 
+                        dockerImage.push("${BUILD_ID}")
+                        kubeCredential = 'kube_login'
                         
-        //                 dockerImage.push("latest")
-        //             }
-        //         }
-        //     }
-        // }
+                        dockerImage.push("latest")
+                    }
+                }
+            }
+        }
 
-        // stage('Deploy image to kubernetes cluster') {
-        //     steps {
-        //         echo '### Deploying image to kubernetes cluster ###'
-        //         script {
-        //             kubernetesDeploy(configs: "hellowhale.yml", kubeconfigId: "mykubeconfig")
-        //         }
-        //     }
-        // }
+        stage('Deploy image to kubernetes cluster') {
+            
+            steps {
+                echo '### Deploying image to kubernetes cluster ###'
+                withKubeConfig([credentialsId: "${kubeCredential}"]) {
+                    sh 'kubectl apply -f config.yml'
+                }
+            }
+        }
     }
 }
