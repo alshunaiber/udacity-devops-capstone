@@ -11,7 +11,7 @@ pipeline {
         dockerUser= "faalsh"
         registryCredential = "docker_login" 
         kubeCredential = "kube_login"
-        kubeConfig = config.yml
+        kubeConfig = "config.yml"
 
         dockerImage = ""
 
