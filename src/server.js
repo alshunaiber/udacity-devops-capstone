@@ -9,7 +9,7 @@ const indexRouter = require('./routes/index');
 const booksRouter = require('./routes/books');
 const authorsRouter = require('./routes/authors');
 
-const app = express()
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
