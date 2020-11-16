@@ -1,21 +1,9 @@
 # Udacity DevOps Capstone Project
 
 - [Udacity DevOps Capstone Project](#udacity-devops-capstone-project)
-  - [Overview](#overview)
-  - [Project Contents](#project-contents)
   - [CloudFormation Commands](#cloudformation-commands)
   - [Kubernetes Commands](#kubernetes-commands)
   - [Docker Commands](#docker-commands)
-
-## Overview
-
-project description 
-
-## Project Contents
-
-* content 1
-* content 2
-* content 2
 
 ## CloudFormation Commands
 
