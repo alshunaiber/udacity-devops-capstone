@@ -1,7 +1,7 @@
 const authors = [
   {
     id: 1,
-    name: 'James Joyce',
+    name: 'James_Joyce',
     dob: 1882
   },
   {
