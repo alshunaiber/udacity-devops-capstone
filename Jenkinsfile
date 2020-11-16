@@ -11,7 +11,6 @@ pipeline {
         dockerUser= "faalsh"
         registryCredential = "docker_login"
         kubeCredential = "kube_login"
-        kubeConfig = "config.yml"
 
         dockerImage = ""
 
@@ -25,11 +24,8 @@ pipeline {
                 // script {
                 //     kubernetesDeploy(configs: "${kubeConfig}", kubeconfigId: "${kubeCredential}")
                 // }
-                withKubeConfig([credentialsId: "kube_login"]) {
+                withKubeConfig([credentialsId: "${kubeCredential}"]) {
                     sh 'kubectl apply -f config.yml'
-                    sh 'KUBECONFIG=/etc/kube/KubeConfig'
-                    sh 'echo $KUBECONFIG'
-                    sh 'cat $(echo $KUBECONFIG)'
                 }
             }
         }
@@ -52,12 +48,12 @@ pipeline {
         //     }
         // }
 
-        stage('Run Nodejs Linting Tools') {
-            steps {
-                echo '### Running eslint on code ###'
-                sh 'cd src; npm run lint'
-            }
-        }
+        // stage('Run Nodejs Linting Tools') {
+        //     steps {
+        //         echo '### Running eslint on code ###'
+        //         sh 'cd src; npm run lint'
+        //     }
+        // }
 
         // stage('Run Docker Linting Tools') {
         //     agent {
