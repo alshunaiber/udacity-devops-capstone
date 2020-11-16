@@ -8,25 +8,25 @@ pipeline {
 
     environment {
         appName = "books"
-        dockerUser= 'faalsh'
-        registryCredential = 'docker_login' 
-        kubeCredential = 'kube_login'
-        kubeConfig = 'config.yml'
+        dockerUser= "faalsh"
+        registryCredential = "docker_login" 
+        kubeCredential = "kube_login"
+        kubeConfig = config.yml
 
-        dockerImage = '' 
+        dockerImage = ""
 
     }
 
     stages {
 
-        // stage('test deploy') {
-        //     steps {
-        //         echo '### Deploying image to kubernetes cluster ###'
-        //         script {
-        //             kubernetesDeploy(configs: "${kubeConfig}", kubeconfigId: "${kubeCredential}")
-        //         }
-        //     }
-        // }
+        stage('test deploy') {
+            steps {
+                echo '### Deploying image to kubernetes cluster ###'
+                script {
+                    kubernetesDeploy(configs: "${kubeConfig}", kubeconfigId: "${kubeCredential}")
+                }
+            }
+        }
 
 
         stage('NPM Install') {
