@@ -27,6 +27,7 @@ pipeline {
                 // }
                 withKubeConfig([credentialsId: "kube_login"]) {
                     // sh 'kubectl apply -f config.yml'
+                        sh 'KUBECONFIG=/etc/kube/KubeConfig'
                         sh 'echo $KUBECONFIG'
                         sh 'cat $(echo $KUBECONFIG)'
 
@@ -35,15 +36,15 @@ pipeline {
         }
 
 
-        stage('NPM Install') {
-            steps {
-                echo '### Installing NPM dependencies ###'
-                sh '''
-                        cd src
-                        npm install
-                   '''
-            }
-        }
+        // stage('NPM Install') {
+        //     steps {
+        //         echo '### Installing NPM dependencies ###'
+        //         sh '''
+        //                 cd src
+        //                 npm install
+        //            '''
+        //     }
+        // }
 
         // stage('Run Unit Tests') {
         //     steps {
